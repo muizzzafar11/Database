@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+// import java.io.IOException;
 
 /**
  * Gui
@@ -27,7 +27,7 @@ public class Gui {
             new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(),
             new JTextField(), new JTextField(), new JTextField(), new JTextField() };
 
-    private String[] textArray = new String[textFieldArrayOutput.length-1];
+    private String[] textArray = new String[textFieldArrayOutput.length - 1];
 
     public Gui(int x, int y) {
         this.x = x;
@@ -47,7 +47,7 @@ public class Gui {
     private void Specifications() {
         contentPane = (JPanel) frame.getContentPane();
         contentPane.setLayout(new BorderLayout(6, 6));
-        
+
         makeSouthRegion(contentPane);
         makeNorthRegion(contentPane);
 
@@ -91,7 +91,7 @@ public class Gui {
                 textFieldArrayOutput[9]));
         panel.add(periodSmallPanel("  Period 5  ", textFieldArrayOutput[10], "  Period 5 Teacher  ",
                 textFieldArrayOutput[11]));
-        // panel.add(smallPanel("  Id          ", textFieldArrayInput[12]));
+        // panel.add(smallPanel(" Id ", textFieldArrayInput[12]));
         JPanel smallPanel2 = new JPanel();
         JButton populateButton = new JButton("Show button");
         smallPanel2.add(populateButton);
@@ -103,7 +103,7 @@ public class Gui {
     }
 
     private void makeSouthRegion(Container pane) {
-// not working for period 5 teacher or period
+        // not working for period 5 teacher or period
         JPanel panelsouth = new JPanel();
         panelsouth.setLayout(new BoxLayout(panelsouth, BoxLayout.Y_AXIS));
         panelsouth.setBorder(BorderFactory.createTitledBorder("Display:"));
@@ -143,15 +143,20 @@ public class Gui {
             FileInputOutput fioId = new FileInputOutput("test.txt");
             try {
                 textArray[0] = fioId.getId();
-            } catch (IOException e1) {
+            } catch (Exception e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            if (textArray[0] != "0")
-                textArray[0] = Integer.toString(Integer.parseInt(textArray[0]) + 1) + "|";
-            else if (textArray[0] == "0") {
-                textArray[0] += "|";
-            }
+
+            // if (textArray[0] == "1")
+            // textArray[0] += "1";
+            // else if (textArray[0] != "0" && textArray[0] != "1")
+            // if (textArray[0] != "0")
+
+                // textArray[0] = Integer.toString(Integer.parseInt(textArray[0]) + 1) + "|";
+            // if (textArray[0] == "null|") {
+                //textArray[0].replace("null|", "0|");
+            
             int j = 0;
             for (int i = 1; i < textFieldArrayOutput.length - 1; i++) {
 
