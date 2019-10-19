@@ -62,73 +62,18 @@ public class FileInputOutput {
         }
     }
 
-    // reader = new BufferedReader(new FileReader(this.FileName));
-    // while ((line = reader.readLine()) != null) {
-    // return Character.toString(line.charAt(0));
-    // }
-    // if ((line = reader.readLine()) == null)
-    // return "0";
-    // reader.close();
-    // return null;
-
-    private String answer = "";
-    // private String answer2;
+    private String rowVal = "";
 
     public String getId() throws IOException {
 
-        // whichever element is at last, convert it to int and add 1 to it and return as
-        // a string.
-
-        // line = reader.readLine();
-
-        while ((answer = reader.readLine()) != null) {
-            // will work till 9, after ten it will start outputting 2 because the first
-            // element is 1 and so on. .before maybe
-            line = Integer.toString((Character.getNumericValue(answer.charAt(0)) + 1));
-            // line = reader.readLine();
+        while ((rowVal = reader.readLine()) != null) {
+            // finding the first occurrence of | in the string. 
+            int number = rowVal.indexOf("|");
+            line = Integer.toString(Integer.parseInt(rowVal.substring(0, number))+1);
         }
         if (line == "")
             return "0|";
         return line + "|";
-        // if ((line = reader.readLine()) == null){
-        // return "0";
-        // }
-        // return line+"|";
-        // line = reader.readLine();
-
-        // if ((line) != null) {
-
-        // line = reader.readLine();
-        // if ((line) == null) {
-        // return "0";
-        // }
-        // // line = "";
-        // // line = reader.readLine();
-        // while ((line) != null) {
-        // int num = Character.getNumericValue(line.charAt(0));
-        // if(num == 0 && reader.readLine() == null){
-        // return "1";
-        // }
-        // else{
-        // answer += line;
-        // line = reader.readLine();
-        // }
-
-        // }
-        // return Character.toString(answer.charAt(0));
-
-        // File file = new File(this.FileName);
-        // Scanner readerScanner = new Scanner(new File(this.FileName));
-        // if ((readerScanner.nextLine() == null))
-        // return "0";
-        // if ((readerScanner.nextLine()) != null)
-        // while ((readerScanner.hasNextLine())) {
-        // line = Character.toString(readerScanner.nextLine().charAt(0));
-        // return line;
-        // }
-
-        // readerScanner.close();
-        // return null;
     }
 
     public void getFile(JTextField[] textFields) {

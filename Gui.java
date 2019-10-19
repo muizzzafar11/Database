@@ -148,15 +148,6 @@ public class Gui {
                 e1.printStackTrace();
             }
 
-            // if (textArray[0] == "1")
-            // textArray[0] += "1";
-            // else if (textArray[0] != "0" && textArray[0] != "1")
-            // if (textArray[0] != "0")
-
-                // textArray[0] = Integer.toString(Integer.parseInt(textArray[0]) + 1) + "|";
-            // if (textArray[0] == "null|") {
-                //textArray[0].replace("null|", "0|");
-            
             int j = 0;
             for (int i = 1; i < textFieldArrayOutput.length - 1; i++) {
 
