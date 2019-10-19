@@ -67,27 +67,32 @@ public class FileInputOutput {
     public String getId() throws IOException {
 
         while ((rowVal = reader.readLine()) != null) {
-            // finding the first occurrence of | in the string. 
+            // finding the first occurrence of | in the string.
             int number = rowVal.indexOf("|");
-            line = Integer.toString(Integer.parseInt(rowVal.substring(0, number))+1);
+            line = Integer.toString(Integer.parseInt(rowVal.substring(0, number)) + 1);
         }
         if (line == "")
             return "0|";
         return line + "|";
     }
 
-    public void getFile(JTextField[] textFields) {
-        try {
+    public String getRow(JTextField[] textFields) throws IOException {
+        // textFields[i].setText(line);
+        
             reader = new BufferedReader(new FileReader(this.FileName));
-            // for (int i = 0; i < textFields.length; i++) {
+
             while ((line = reader.readLine()) != null) {
-                // System.out.println(line);
-                // }
+                int number = line.indexOf("|");
+                String Id = line.substring(0, number);
+                String removeId = line.substring(0, (number+1));
+                String textFieldText = textFields[textFields.length-1].getText();
+                if (Id.equals(textFieldText)) {
+                    //return a string without any id and its seperator
+                    line = line.replace(removeId, "");
+                    return line;
+                }
             }
             reader.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        return null;
     }
 }

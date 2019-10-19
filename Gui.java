@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 // import java.io.IOException;
+import java.io.IOException;
 
 /**
  * Gui
@@ -94,7 +95,7 @@ public class Gui {
                 textFieldArrayOutput[9], false));
         panel.add(periodSmallPanel("  Period 5  ", textFieldArrayOutput[10], "  Period 5 Teacher  ",
                 textFieldArrayOutput[11], false));
-        panel.add(smallPanel(" Id ", textFieldArrayOutput[12], false));
+        panel.add(smallPanel(" Id ", textFieldArrayOutput[12], true));
         JPanel smallPanel2 = new JPanel();
         JButton populateButton = new JButton("populate button");
         smallPanel2.add(populateButton);
@@ -128,10 +129,40 @@ public class Gui {
         JButton submitButton = new JButton("submit button");
         smallPanel2.add(submitButton);
         panelsouth.add(smallPanel2);
-        // TODO: make a private inner class for the actionlistener thing
         submitButton.addActionListener(new WriteToFile());
         // smallPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
         pane.add(panelsouth, BorderLayout.SOUTH);
+
+    }
+
+    // Change the names of the array, make a new array so that we don't have any
+    // errors
+    private void makeCenterRegion(Container pane) {
+        // not working for period 5 teacher or period
+        JPanel panelsouth = new JPanel();
+        panelsouth.setLayout(new BoxLayout(panelsouth, BoxLayout.Y_AXIS));
+        panelsouth.setBorder(BorderFactory.createTitledBorder("Edit Database:"));
+
+        panelsouth.add(smallPanel("  Name      ", textFieldArrayInput[0], true));
+        panelsouth.add(smallPanel("  Age          ", textFieldArrayInput[1], true));
+        panelsouth.add(periodSmallPanel("  Period 1  ", textFieldArrayInput[2], "  Period 1 Teacher  ",
+                textFieldArrayInput[3], true));
+        panelsouth.add(periodSmallPanel("  Period 2  ", textFieldArrayInput[4], "  Period 2 Teacher  ",
+                textFieldArrayInput[5], true));
+        panelsouth.add(periodSmallPanel("  Period 3  ", textFieldArrayInput[6], "  Period 3 Teacher  ",
+                textFieldArrayInput[7], true));
+        panelsouth.add(periodSmallPanel("  Period 4  ", textFieldArrayInput[8], "  Period 4 Teacher  ",
+                textFieldArrayInput[9], true));
+        panelsouth.add(periodSmallPanel("  Period 5  ", textFieldArrayInput[10], "  Period 5 Teacher  ",
+                textFieldArrayInput[11], true));
+
+        JPanel smallPanel2 = new JPanel();
+        JButton submitButton = new JButton("submit button");
+        smallPanel2.add(submitButton);
+        panelsouth.add(smallPanel2);
+        submitButton.addActionListener(new WriteToFile());
+        // smallPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        pane.add(panelsouth, BorderLayout.CENTER);
 
     }
 
@@ -139,11 +170,7 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO: read the file, oif there is an id present then give an id of 1 else add
-            // 1 to the previous one and store that
 
-            // reading from file, taking the first element, if nothing there then the nu,ber
-            // is zero, if there is anything convert it to a nimber and add 1 to it.
             FileInputOutput fioId = new FileInputOutput("test.txt");
             try {
                 textArray[0] = fioId.getId();
@@ -173,10 +200,21 @@ public class Gui {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
-            for (int i = 0; i < textFieldArrayOutput.length; i++) {
-                textArray[i] = textFieldArrayOutput[i].getText() + "|";
-                FileInputOutput fio = new FileInputOutput("test.txt", textArray[i]);
-                fio.getFile(textFieldArrayOutput);
+            FileInputOutput fio = new FileInputOutput("test.txt");
+            String row;
+            try {
+                row = fio.getRow(textFieldArrayOutput);
+                for (int i = 0; i < textFieldArrayOutput.length - 1; i++) {
+                    int num = row.indexOf("|");
+                    String text = row.substring(0, num);
+                    String removetext = row.substring(0, (num + 1));
+                    row = row.replace(removetext, "");
+                    textFieldArrayOutput[i].setText(text);
+                    // textFieldArrayOutput[i].setText();
+                }
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
             }
         }
     }
