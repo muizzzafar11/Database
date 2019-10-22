@@ -19,6 +19,7 @@ public class Gui {
     private int x, y;
     private JFrame frame;
     private Container contentPane;
+    private String DeleteRowIdString;
 
     private JTextField[] textFieldArrayInput = new JTextField[] { new JTextField(), new JTextField(), new JTextField(),
             new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(),
@@ -40,7 +41,8 @@ public class Gui {
         frame.setVisible(true);
         frame.setSize(this.x, this.y);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(true);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(3);
         Specifications();
 
     }
@@ -48,9 +50,24 @@ public class Gui {
     private void Specifications() {
         contentPane = (JPanel) frame.getContentPane();
         contentPane.setLayout(new BorderLayout(6, 6));
+        mainDisplay(contentPane);
 
-        makeSouthRegion(contentPane);
-        makeNorthRegion(contentPane);
+    }
+
+    private void mainDisplay(Container pane) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setBorder(BorderFactory.createTitledBorder("Action Buttons:"));
+        JButton addButton = new JButton("Add to Database");
+        JButton recallButton = new JButton("Recall from the Database");
+        JButton deleteButton = new JButton("Delete from the Database");
+        panel.add(addButton);
+        panel.add(recallButton);
+        panel.add(deleteButton);
+        pane.add(panel, BorderLayout.NORTH);
+        recallButton.addActionListener(new recallButtonClass());
+        addButton.addActionListener(new addButtonClass());
+        deleteButton.addActionListener(new deleteButtonClass());
 
     }
 
@@ -75,9 +92,28 @@ public class Gui {
         textFieldTeacher.setEditable(editable);
         smallPanel.add(textFieldTeacher);
         return smallPanel;
+
     }
 
-    private void makeNorthRegion(Container pane) {
+    // TODO: make a button on each frame such that the button when pressed, closes
+    // the fraem but doesn't close the original tab, or maybe such that it hides the
+    // frame
+
+    private JFrame MakeSecondaryFrames(String displayText, JPanel panel) {
+        JFrame secondaryFrame = new JFrame(displayText);
+        secondaryFrame.setVisible(true);
+        secondaryFrame.setSize(800, 800);
+        secondaryFrame.setLocationRelativeTo(null);
+        secondaryFrame.setResizable(false);
+        secondaryFrame.setDefaultCloseOperation(3);
+        Container secondaryPane = (JPanel) secondaryFrame.getContentPane();
+        secondaryPane.setLayout(new BorderLayout(6, 6));
+        secondaryPane.add(panel, BorderLayout.NORTH);
+        return secondaryFrame;
+    }
+
+    private void recallTextFrame() {
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder("Populate:"));
@@ -101,12 +137,11 @@ public class Gui {
         smallPanel2.add(populateButton);
         panel.add(smallPanel2);
         populateButton.addActionListener(new getFromFile());
-        // smallPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        pane.add(panel, BorderLayout.NORTH);
+        MakeSecondaryFrames("Recall text", panel);
 
     }
 
-    private void makeSouthRegion(Container pane) {
+    private void writeTextFrame() {
         // not working for period 5 teacher or period
         JPanel panelsouth = new JPanel();
         panelsouth.setLayout(new BoxLayout(panelsouth, BoxLayout.Y_AXIS));
@@ -130,39 +165,54 @@ public class Gui {
         smallPanel2.add(submitButton);
         panelsouth.add(smallPanel2);
         submitButton.addActionListener(new WriteToFile());
-        // smallPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        pane.add(panelsouth, BorderLayout.SOUTH);
 
+        MakeSecondaryFrames("write text", panelsouth);
     }
 
     // Change the names of the array, make a new array so that we don't have any
     // errors
-    private void makeCenterRegion(Container pane) {
-        // not working for period 5 teacher or period
-        JPanel panelsouth = new JPanel();
-        panelsouth.setLayout(new BoxLayout(panelsouth, BoxLayout.Y_AXIS));
-        panelsouth.setBorder(BorderFactory.createTitledBorder("Edit Database:"));
+    private void deleteTextFrame() {
 
-        panelsouth.add(smallPanel("  Name      ", textFieldArrayInput[0], true));
-        panelsouth.add(smallPanel("  Age          ", textFieldArrayInput[1], true));
-        panelsouth.add(periodSmallPanel("  Period 1  ", textFieldArrayInput[2], "  Period 1 Teacher  ",
-                textFieldArrayInput[3], true));
-        panelsouth.add(periodSmallPanel("  Period 2  ", textFieldArrayInput[4], "  Period 2 Teacher  ",
-                textFieldArrayInput[5], true));
-        panelsouth.add(periodSmallPanel("  Period 3  ", textFieldArrayInput[6], "  Period 3 Teacher  ",
-                textFieldArrayInput[7], true));
-        panelsouth.add(periodSmallPanel("  Period 4  ", textFieldArrayInput[8], "  Period 4 Teacher  ",
-                textFieldArrayInput[9], true));
-        panelsouth.add(periodSmallPanel("  Period 5  ", textFieldArrayInput[10], "  Period 5 Teacher  ",
-                textFieldArrayInput[11], true));
+        DeleteRowIdString = JOptionPane.showInputDialog(frame, "Enter Id you want to delete:");
 
-        JPanel smallPanel2 = new JPanel();
-        JButton submitButton = new JButton("submit button");
-        smallPanel2.add(submitButton);
-        panelsouth.add(smallPanel2);
-        submitButton.addActionListener(new WriteToFile());
-        // smallPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        pane.add(panelsouth, BorderLayout.CENTER);
+        FileInputOutput fio = new FileInputOutput("test.txt");
+        try {
+            Integer.parseInt(DeleteRowIdString);
+            // Integer.parseInt(textFieldArrayOutput[12].getText());
+        } catch (NumberFormatException isId) {
+            JOptionPane.showMessageDialog(frame, "The entered input isn't a number.", "Input error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        fio.deleteRow(DeleteRowIdString);
+    }
+
+    private class recallButtonClass implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            recallTextFrame();
+        }
+
+    }
+
+    private class addButtonClass implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            writeTextFrame();
+        }
+
+    }
+
+    private class deleteButtonClass implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            deleteTextFrame();
+        }
 
     }
 
@@ -218,5 +268,4 @@ public class Gui {
             }
         }
     }
-
 }
