@@ -186,7 +186,6 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
             recallTextFrame();
         }
 
@@ -196,7 +195,6 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
             writeTextFrame();
         }
 
@@ -206,7 +204,7 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
+            
             deleteTextFrame();
         }
 
@@ -221,7 +219,6 @@ public class Gui {
             try {
                 textArray[0] = fioId.getId();
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             System.out.println(textArray.length);
@@ -245,7 +242,7 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
+            
             FileInputOutput fio = new FileInputOutput("test.txt");
             String row;
             try {

@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JTextField;
+
 /*
  * FileInputOutput
  * A swing thing for inputting data from the user
@@ -17,6 +18,7 @@ public class FileInputOutput {
     private String UserInput;
     private BufferedWriter writer;
     private BufferedReader reader;
+
     private String line = "";
     private String IdData;
     private String readLine, line3;
@@ -32,7 +34,7 @@ public class FileInputOutput {
             reader = new BufferedReader(new FileReader(this.FileName));
             writer = new BufferedWriter(new FileWriter(this.FileName, true));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
     }
@@ -43,7 +45,7 @@ public class FileInputOutput {
             writer = new BufferedWriter(new FileWriter(this.FileName, true));
             reader = new BufferedReader(new FileReader(this.FileName));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
     }
@@ -63,7 +65,6 @@ public class FileInputOutput {
             writer.newLine();
             writer.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -108,7 +109,7 @@ public class FileInputOutput {
                 }
             }
         } catch (NumberFormatException | IOException e1) {
-            // TODO Auto-generated catch block
+
             e1.printStackTrace();
         }
         try {
@@ -120,7 +121,7 @@ public class FileInputOutput {
             }
             writer.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
     }
@@ -143,9 +144,19 @@ public class FileInputOutput {
         // put that line here, this is the error
         return "null";
     }
+    public void editRow() {
+        try {
+            while ((line = reader.readLine()) != null) {
+                
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 // Have jradioboxes, make an array for each jradiobox. each index corresponds
 // with the one of the string array contining the string seperated by |.
-// The string will replace, 
-// give each radiobox a number and it will move onto that number of the gettext string array, ask for the index first, 
+// The string will replace,
+// give each radiobox a number and it will move onto that number of the gettext
+// string array, ask for the index first,
