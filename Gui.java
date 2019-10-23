@@ -95,17 +95,13 @@ public class Gui {
 
     }
 
-    // TODO: make a button on each frame such that the button when pressed, closes
-    // the fraem but doesn't close the original tab, or maybe such that it hides the
-    // frame
-
     private JFrame MakeSecondaryFrames(String displayText, JPanel panel) {
         JFrame secondaryFrame = new JFrame(displayText);
         secondaryFrame.setVisible(true);
-        secondaryFrame.setSize(800, 800);
+        secondaryFrame.setSize(800, 250);
         secondaryFrame.setLocationRelativeTo(null);
         secondaryFrame.setResizable(false);
-        secondaryFrame.setDefaultCloseOperation(3);
+        secondaryFrame.setDefaultCloseOperation(2);
         Container secondaryPane = (JPanel) secondaryFrame.getContentPane();
         secondaryPane.setLayout(new BorderLayout(6, 6));
         secondaryPane.add(panel, BorderLayout.NORTH);
@@ -253,7 +249,13 @@ public class Gui {
             FileInputOutput fio = new FileInputOutput("test.txt");
             String row;
             try {
+                Integer.parseInt(textFieldArrayOutput[12].getText());
                 row = fio.getRow(textFieldArrayOutput);
+                if (row.equals("null")) {
+                    JOptionPane.showMessageDialog(frame, "The entered input doesn't exist.", "Id too large",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 for (int i = 0; i < textFieldArrayOutput.length - 1; i++) {
                     int num = row.indexOf("|");
                     String text = row.substring(0, num);
@@ -262,9 +264,9 @@ public class Gui {
                     textFieldArrayOutput[i].setText(text);
                     // textFieldArrayOutput[i].setText();
                 }
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+            } catch (IOException | NumberFormatException e1) {
+                JOptionPane.showMessageDialog(frame, "The entered input isn't a number.", "Input error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }

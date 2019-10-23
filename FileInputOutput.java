@@ -1,17 +1,10 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-// import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
-// import java.util.Scanner;
 import javax.swing.JTextField;
-
-// import jdk.nashorn.internal.parser.Scanner;
-
 /*
  * FileInputOutput
  * A swing thing for inputting data from the user
@@ -25,6 +18,12 @@ public class FileInputOutput {
     private BufferedWriter writer;
     private BufferedReader reader;
     private String line = "";
+    private String IdData;
+    private String readLine, line3;
+    private ArrayList<String> data = new ArrayList<String>();
+    private int i = 0;
+    private int endIndex;
+    private StringBuilder stringBuilder;
 
     public FileInputOutput(String FileName, String UserInput) {
         this.FileName = FileName;
@@ -51,9 +50,6 @@ public class FileInputOutput {
 
     public void WriteFile() {
         try {
-            // True tells that the fiel is already present so don't create it
-            // writer = new BufferedWriter(new FileWriter(this.FileName, true));
-            // Writing the input to the user
             writer.write(this.UserInput);
             writer.close();
         } catch (Exception e) {
@@ -86,13 +82,10 @@ public class FileInputOutput {
         return line + "|";
     }
 
+    // private String checkLargerId;
+
     public void deleteRow(String Id) {
-        String IdData;
-        String readLine, line3;
-        ArrayList<String> data = new ArrayList<String>();
-        int i = 0;
-        int endIndex;
-        StringBuilder stringBuilder;
+
         try {
             while ((readLine = reader.readLine()) != null) {
                 endIndex = readLine.indexOf("|");
@@ -147,6 +140,12 @@ public class FileInputOutput {
             }
         }
         reader.close();
-        return null;
+        // put that line here, this is the error
+        return "null";
     }
 }
+
+// Have jradioboxes, make an array for each jradiobox. each index corresponds
+// with the one of the string array contining the string seperated by |.
+// The string will replace, 
+// give each radiobox a number and it will move onto that number of the gettext string array, ask for the index first, 
