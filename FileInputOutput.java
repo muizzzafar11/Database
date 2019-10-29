@@ -21,11 +21,14 @@ public class FileInputOutput {
 
     private String line = "";
     private String IdData;
-    private String readLine, line3;
+    private String reduceIdLine;
     private ArrayList<String> data = new ArrayList<String>();
     private int i = 0;
     private int endIndex;
     private StringBuilder stringBuilder;
+    private String textId;
+    private String removeId;
+    private String textFieldText;
 
     public FileInputOutput(String FileName, String UserInput) {
         this.FileName = FileName;
@@ -69,50 +72,47 @@ public class FileInputOutput {
         }
     }
 
+    
     private String rowVal = "";
 
     public String getId() throws IOException {
 
-        while ((rowVal = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             // finding the first occurrence of | in the string.
-            int number = rowVal.indexOf("|");
-            line = Integer.toString(Integer.parseInt(rowVal.substring(0, number)) + 1);
+            int number = line.indexOf("|");
+            rowVal = Integer.toString(Integer.parseInt(line.substring(0, number)) + 1);
         }
-        if (line == "")
+        if (rowVal == "")
             return "0|";
-        return line + "|";
+        return rowVal + "|";
     }
 
     // private String checkLargerId;
 
     public void deleteRow(String Id) {
 
+        // replace line with readline to make it work
         try {
-            while ((readLine = reader.readLine()) != null) {
-                endIndex = readLine.indexOf("|");
-                IdData = readLine.substring(0, endIndex);
+            while ((line = reader.readLine()) != null) {
+                endIndex = line.indexOf("|");
+                IdData = line.substring(0, endIndex);
                 if ((IdData.equals(Id)) == false) {
-                    data.add(i, readLine);
+                    data.add(i, line);
                     i++;
                 } else if (IdData.equals(Id)) {
                     // when it goes back, it is set to null, change that as well
-                    while ((readLine = reader.readLine()) != null) {
-                        endIndex = readLine.indexOf("|");
-                        int reduceVal = Integer.parseInt(readLine.substring(0, endIndex)) - 1;
-                        line3 = Integer.toString(reduceVal);
-                        stringBuilder = new StringBuilder(readLine);
+                    while ((line = reader.readLine()) != null) {
+                        endIndex = line.indexOf("|");
+                        int reduceVal = Integer.parseInt(line.substring(0, endIndex)) - 1;
+                        reduceIdLine = Integer.toString(reduceVal);
+                        stringBuilder = new StringBuilder(line);
                         stringBuilder.delete(0, endIndex);
-                        line3 += stringBuilder;
-                        data.add(i, line3);
+                        reduceIdLine += stringBuilder;
+                        data.add(i, reduceIdLine);
                         i++;
                     }
                 }
             }
-        } catch (NumberFormatException | IOException e1) {
-
-            e1.printStackTrace();
-        }
-        try {
             writer = new BufferedWriter(new FileWriter(this.FileName));
             for (int j = 0; j < data.size(); j++) {
                 String stringData = data.get(j);
@@ -120,9 +120,9 @@ public class FileInputOutput {
                 writer.newLine();
             }
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException e1) {
 
-            e.printStackTrace();
+            e1.printStackTrace();
         }
     }
 
@@ -130,10 +130,10 @@ public class FileInputOutput {
         // reader = new BufferedReader(new FileReader(this.FileName));
 
         while ((line = reader.readLine()) != null) {
-            int indexBar = line.indexOf("|");
-            String textId = line.substring(0, indexBar);
-            String removeId = line.substring(0, (indexBar + 1));
-            String textFieldText = textFields[textFields.length - 1].getText();
+            endIndex = line.indexOf("|");
+            textId = line.substring(0, endIndex);
+            removeId = line.substring(0, (endIndex + 1));
+            textFieldText = textFields[textFields.length - 1].getText();
             if (textId.equals(textFieldText)) {
                 // return a string without any id and its seperator
                 line = line.replace(removeId, "");
@@ -144,14 +144,35 @@ public class FileInputOutput {
         // put that line here, this is the error
         return "null";
     }
-    public void editRow() {
+
+    // check the number for this string I think this is wrong.
+    private String[] abc = new String[13];
+
+    // Filling the array wiuth the elements of the row, rn, with the id and the bar.
+
+    // public String[] getRowEdit(String Id) {
+    // }
+
+    public String[] getRowEdit(String getDialogboxId) {
         try {
             while ((line = reader.readLine()) != null) {
-                
+                endIndex = line.indexOf("|");
+                textId = line.substring(0, endIndex);
+                if (textId.equals(getDialogboxId)) {
+                    for (int i = 0; i < abc.length; i++) {
+                        endIndex = line.indexOf("|");
+                        endIndex++;
+                        abc[i] = line.substring(0, endIndex);
+                    }
+                    return abc;
+                }
+                // error message, no such id exists in the database;
             }
+            // error message, nothing in the database.
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
 

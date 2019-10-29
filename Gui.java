@@ -19,15 +19,11 @@ public class Gui {
     private int x, y;
     private JFrame frame;
     private Container contentPane;
-    private String DeleteRowIdString;
+    private String getDialogboxId;
 
-    private JTextField[] textFieldArrayInput = new JTextField[] { new JTextField(), new JTextField(), new JTextField(),
-            new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(),
-            new JTextField(), new JTextField(), new JTextField() };
-
-    private JTextField[] textFieldArrayOutput = new JTextField[] { new JTextField(), new JTextField(), new JTextField(),
-            new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(), new JTextField(),
-            new JTextField(), new JTextField(), new JTextField(), new JTextField() };
+    private JTextField[] textFieldArrayInput = new JTextField[12];
+    private JTextField[] textFieldArrayOutput = new JTextField[13];
+    // private JRadioButton[] radioButton = new JRadioButton[12];
 
     private String[] textArray = new String[textFieldArrayInput.length + 1];
 
@@ -36,7 +32,18 @@ public class Gui {
         this.y = y;
     }
 
+    private void initializeThing() {
+        for (int i = 0; i < textFieldArrayInput.length; i++) {
+            textFieldArrayInput[i] = new JTextField();
+            // radioButton[i] = new JRadioButton();
+        }
+        for (int i = 0; i < textFieldArrayOutput.length; i++) {
+            textFieldArrayOutput[i] = new JTextField();
+        }
+    }
+
     public void makeFrame() {
+        initializeThing();
         frame = new JFrame("Database App");
         frame.setVisible(true);
         frame.setSize(this.x, this.y);
@@ -54,6 +61,9 @@ public class Gui {
 
     }
 
+    // TODO prompt them which row they want to edit and then populate the row and
+    // replace
+    // it, with the button already present
     private void mainDisplay(Container pane) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -61,14 +71,16 @@ public class Gui {
         JButton addButton = new JButton("Add to Database");
         JButton recallButton = new JButton("Recall from the Database");
         JButton deleteButton = new JButton("Delete from the Database");
+        JButton editRowButton = new JButton("Edit Row");
         panel.add(addButton);
         panel.add(recallButton);
         panel.add(deleteButton);
+        panel.add(editRowButton);
         pane.add(panel, BorderLayout.NORTH);
         recallButton.addActionListener(new recallButtonClass());
         addButton.addActionListener(new addButtonClass());
         deleteButton.addActionListener(new deleteButtonClass());
-
+        editRowButton.addActionListener(new recallButtonClass());
     }
 
     private JPanel smallPanel(String Name, JTextField textfield, boolean editable) {
@@ -169,23 +181,24 @@ public class Gui {
     // errors
     private void deleteTextFrame() {
 
-        DeleteRowIdString = JOptionPane.showInputDialog(frame, "Enter Id you want to delete:");
+        getDialogboxId = JOptionPane.showInputDialog(frame, "Enter Id you want to delete:");
 
         FileInputOutput fio = new FileInputOutput("test.txt");
         try {
-            Integer.parseInt(DeleteRowIdString);
+            Integer.parseInt(getDialogboxId);
             // Integer.parseInt(textFieldArrayOutput[12].getText());
         } catch (NumberFormatException isId) {
             JOptionPane.showMessageDialog(frame, "The entered input isn't a number.", "Input error",
                     JOptionPane.ERROR_MESSAGE);
         }
-        fio.deleteRow(DeleteRowIdString);
+        fio.deleteRow(getDialogboxId);
     }
 
     private class recallButtonClass implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+
             recallTextFrame();
         }
 
@@ -204,12 +217,13 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             deleteTextFrame();
         }
 
     }
 
+    // For the button in the second frame
     private class WriteToFile implements ActionListener {
 
         @Override
@@ -242,7 +256,7 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             FileInputOutput fio = new FileInputOutput("test.txt");
             String row;
             try {
@@ -253,11 +267,15 @@ public class Gui {
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                // the rowval = "" messes this up
                 for (int i = 0; i < textFieldArrayOutput.length - 1; i++) {
                     int num = row.indexOf("|");
                     String text = row.substring(0, num);
                     String removetext = row.substring(0, (num + 1));
+                    // not removing | thing, instead it is just repacing the
+
                     row = row.replace(removetext, "");
+
                     textFieldArrayOutput[i].setText(text);
                     // textFieldArrayOutput[i].setText();
                 }
