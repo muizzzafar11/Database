@@ -20,6 +20,7 @@ public class Gui {
     private JFrame frame;
     private Container contentPane;
     private String getDialogboxId;
+    private String editRowString = "";
 
     private JTextField[] textFieldArrayInput = new JTextField[12];
     private JTextField[] textFieldArrayOutput = new JTextField[13];
@@ -80,7 +81,7 @@ public class Gui {
         recallButton.addActionListener(new recallButtonClass());
         addButton.addActionListener(new addButtonClass());
         deleteButton.addActionListener(new deleteButtonClass());
-        editRowButton.addActionListener(new recallButtonClass());
+        editRowButton.addActionListener(new editbuttonclass());
     }
 
     private JPanel smallPanel(String Name, JTextField textfield, boolean editable) {
@@ -120,34 +121,41 @@ public class Gui {
         return secondaryFrame;
     }
 
-    private void recallTextFrame() {
+    private void recallTextFrame(Boolean editable) {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder("Populate:"));
 
         // panel.add(smallPanel(" Id ", textFieldArrayOutput[12]));
-        panel.add(smallPanel("  Name      ", textFieldArrayOutput[0], false));
-        panel.add(smallPanel("  Age          ", textFieldArrayOutput[1], false));
+        panel.add(smallPanel("  Name      ", textFieldArrayOutput[0], editable));
+        panel.add(smallPanel("  Age          ", textFieldArrayOutput[1], editable));
         panel.add(periodSmallPanel("  Period 1  ", textFieldArrayOutput[2], "  Period 1 Teacher  ",
-                textFieldArrayOutput[3], false));
+                textFieldArrayOutput[3], editable));
         panel.add(periodSmallPanel("  Period 2  ", textFieldArrayOutput[4], "  Period 2 Teacher  ",
-                textFieldArrayOutput[5], false));
+                textFieldArrayOutput[5], editable));
         panel.add(periodSmallPanel("  Period 3  ", textFieldArrayOutput[6], "  Period 3 Teacher  ",
-                textFieldArrayOutput[7], false));
+                textFieldArrayOutput[7], editable));
         panel.add(periodSmallPanel("  Period 4  ", textFieldArrayOutput[8], "  Period 4 Teacher  ",
-                textFieldArrayOutput[9], false));
+                textFieldArrayOutput[9], editable));
         panel.add(periodSmallPanel("  Period 5  ", textFieldArrayOutput[10], "  Period 5 Teacher  ",
-                textFieldArrayOutput[11], false));
-        panel.add(smallPanel(" Id ", textFieldArrayOutput[12], true));
+                textFieldArrayOutput[11], editable));
+        panel.add(smallPanel(" Id ", textFieldArrayOutput[12], !editable));
         JPanel smallPanel2 = new JPanel();
         JButton populateButton = new JButton("populate button");
         smallPanel2.add(populateButton);
+        JButton editButton = new JButton("Edit Button");
+        if (editable) {
+            smallPanel2.add(editButton);
+        }
         panel.add(smallPanel2);
         populateButton.addActionListener(new getFromFile());
+        editButton.addActionListener(new updateFile());
         MakeSecondaryFrames("Recall text", panel);
 
     }
+    // the textfieldoutputarray contains the new text of the thing
+    // If they press the update button then the
 
     private void writeTextFrame() {
         // not working for period 5 teacher or period
@@ -198,8 +206,18 @@ public class Gui {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            recallTextFrame(false);
+        }
 
-            recallTextFrame();
+    }
+
+    private class editbuttonclass implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getDialogboxId = JOptionPane.showInputDialog(frame, "Enter Id you want to edit:");
+            textFieldArrayOutput[12].setText(getDialogboxId);
+            recallTextFrame(true);
         }
 
     }
@@ -219,6 +237,26 @@ public class Gui {
         public void actionPerformed(ActionEvent e) {
 
             deleteTextFrame();
+        }
+
+    }
+private String dString = "";
+    private class updateFile implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (int i = 0; i < textFieldArrayOutput.length; i++) {
+                dString = textFieldArrayOutput[i].getText() + "|";
+                textFieldArrayOutput[i].setText(dString);
+            }
+            FileInputOutput fio = new FileInputOutput("test.txt");
+            fio.getRowEdit(textFieldArrayOutput);
+
+            // this is where all the algorithm fro sending text to the file and then
+            // updating the file is.
+            // make a method inside the fio, which requires inly strings or sth and then use
+            // the output array as the parameter
+
         }
 
     }

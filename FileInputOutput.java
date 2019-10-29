@@ -72,7 +72,6 @@ public class FileInputOutput {
         }
     }
 
-    
     private String rowVal = "";
 
     public String getId() throws IOException {
@@ -146,33 +145,41 @@ public class FileInputOutput {
     }
 
     // check the number for this string I think this is wrong.
-    private String[] abc = new String[13];
+    private String textString = "";
 
-    // Filling the array wiuth the elements of the row, rn, with the id and the bar.
-
-    // public String[] getRowEdit(String Id) {
-    // }
-
-    public String[] getRowEdit(String getDialogboxId) {
+    // creating an empty file without the data in it.
+    // Probably the fault of the arraylist
+    public void getRowEdit(JTextField[] textFields) {
         try {
             while ((line = reader.readLine()) != null) {
-                endIndex = line.indexOf("|");
+                endIndex = line.indexOf("|") + 1;
                 textId = line.substring(0, endIndex);
-                if (textId.equals(getDialogboxId)) {
-                    for (int i = 0; i < abc.length; i++) {
-                        endIndex = line.indexOf("|");
-                        endIndex++;
-                        abc[i] = line.substring(0, endIndex);
+                // if ((textId.equals(textFields[12].getText())) == false) {
+                //     data.add(i, line);
+                //     i++;
+                // }
+                  if (textId.equals(textFields[12].getText())) {
+                    textString = textFields[12].getText();
+                    for (int j = 0; j < textFields.length - 1; j++) {
+                        textString += textFields[j].getText();
                     }
-                    return abc;
+                    line = textString;
+                    
                 }
-                // error message, no such id exists in the database;
+                data.add(i, line);
+                    i++;
             }
-            // error message, nothing in the database.
+
+            writer = new BufferedWriter(new FileWriter(this.FileName));
+            for (int j = 0; j < data.size(); j++) {
+                String stringData = data.get(j);
+                writer.write(stringData);
+                writer.newLine();
+            }
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
     }
 }
 
