@@ -3,24 +3,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-// import java.io.IOException;
 import java.io.IOException;
 
-/**
+/*
  * Gui
  */
 public class Gui {
 
-    /**
+    /*
      *
      */
-    // private static final long serialVersionUID = 1L;
 
     private int x, y;
     private JFrame frame;
     private Container contentPane;
     private String getDialogboxId;
-    private String editRowString = "";
 
     private JTextField[] textFieldArrayInput = new JTextField[12];
     private JTextField[] textFieldArrayOutput = new JTextField[13];
@@ -28,11 +25,13 @@ public class Gui {
 
     private String[] textArray = new String[textFieldArrayInput.length + 1];
 
+    // Constructor for setting the size of the main display frame
     public Gui(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
+    // Initializing the textField arrays
     private void initializeThing() {
         for (int i = 0; i < textFieldArrayInput.length; i++) {
             textFieldArrayInput[i] = new JTextField();
@@ -43,6 +42,7 @@ public class Gui {
         }
     }
 
+    // Making the frame and setting its properties
     public void makeFrame() {
         initializeThing();
         frame = new JFrame("Database App");
@@ -55,6 +55,7 @@ public class Gui {
 
     }
 
+    // setting the internal properties of the frame
     private void Specifications() {
         contentPane = (JPanel) frame.getContentPane();
         contentPane.setLayout(new BorderLayout(6, 6));
@@ -62,12 +63,13 @@ public class Gui {
 
     }
 
-    // TODO prompt them which row they want to edit and then populate the row and
-    // replace
-    // it, with the button already present
+    // Setting the properties internal properties of the main frame
     private void mainDisplay(Container pane) {
         JPanel panel = new JPanel();
+        // Setting the layout to x-axis so that all of the buttons are in a straight
+        // line
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        // Making the border
         panel.setBorder(BorderFactory.createTitledBorder("Action Buttons:"));
         JButton addButton = new JButton("Add to Database");
         JButton recallButton = new JButton("Recall from the Database");
@@ -78,12 +80,14 @@ public class Gui {
         panel.add(deleteButton);
         panel.add(editRowButton);
         pane.add(panel, BorderLayout.NORTH);
+        // Adding actionlistener for each of the buttons
         recallButton.addActionListener(new recallButtonClass());
         addButton.addActionListener(new addButtonClass());
         deleteButton.addActionListener(new deleteButtonClass());
         editRowButton.addActionListener(new editbuttonclass());
     }
 
+    // Function for creating the small panel for name and age
     private JPanel smallPanel(String Name, JTextField textfield, boolean editable) {
         JPanel smallPanel = new JPanel();
         smallPanel.setLayout(new BoxLayout(smallPanel, BoxLayout.X_AXIS));
@@ -93,6 +97,7 @@ public class Gui {
         return smallPanel;
     }
 
+    // Function for creating 2 textboxes infron of each other with 1 JLabel each
     private JPanel periodSmallPanel(String Period, JTextField textFieldPeriod, String Teacher,
             JTextField textFieldTeacher, boolean editable) {
 
@@ -108,6 +113,7 @@ public class Gui {
 
     }
 
+    // Function for making the other frames, when the button is pressed
     private JFrame MakeSecondaryFrames(String displayText, JPanel panel) {
         JFrame secondaryFrame = new JFrame(displayText);
         secondaryFrame.setVisible(true);
@@ -121,13 +127,15 @@ public class Gui {
         return secondaryFrame;
     }
 
+    // The recall button text frame
     private void recallTextFrame(Boolean editable) {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createTitledBorder("Populate:"));
 
-        // panel.add(smallPanel(" Id ", textFieldArrayOutput[12]));
+        // Making a textbox and setting each textox to a specified index of the
+        // textField array
         panel.add(smallPanel("  Name      ", textFieldArrayOutput[0], editable));
         panel.add(smallPanel("  Age          ", textFieldArrayOutput[1], editable));
         panel.add(periodSmallPanel("  Period 1  ", textFieldArrayOutput[2], "  Period 1 Teacher  ",
@@ -154,9 +162,8 @@ public class Gui {
         MakeSecondaryFrames("Recall text", panel);
 
     }
-    // the textfieldoutputarray contains the new text of the thing
-    // If they press the update button then the
 
+    // Same as above, making the frame with textFields as editable
     private void writeTextFrame() {
         // not working for period 5 teacher or period
         JPanel panelsouth = new JPanel();
@@ -185,8 +192,7 @@ public class Gui {
         MakeSecondaryFrames("write text", panelsouth);
     }
 
-    // Change the names of the array, make a new array so that we don't have any
-    // errors
+    // prompting the user for the ID they want to delete
     private void deleteTextFrame() {
 
         getDialogboxId = JOptionPane.showInputDialog(frame, "Enter Id you want to delete:");
@@ -240,7 +246,9 @@ public class Gui {
         }
 
     }
-private String dString = "";
+
+    private String dString = "";
+
     private class updateFile implements ActionListener {
 
         @Override
@@ -251,11 +259,6 @@ private String dString = "";
             }
             FileInputOutput fio = new FileInputOutput("test.txt");
             fio.getRowEdit(textFieldArrayOutput);
-
-            // this is where all the algorithm fro sending text to the file and then
-            // updating the file is.
-            // make a method inside the fio, which requires inly strings or sth and then use
-            // the output array as the parameter
 
         }
 
@@ -273,7 +276,6 @@ private String dString = "";
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            System.out.println(textArray.length);
             int j = 0;
             for (int i = 1; i < (textFieldArrayInput.length + 1); i++) {
                 textArray[i] = textFieldArrayInput[j].getText() + "|";
@@ -310,12 +312,10 @@ private String dString = "";
                     int num = row.indexOf("|");
                     String text = row.substring(0, num);
                     String removetext = row.substring(0, (num + 1));
-                    // not removing | thing, instead it is just repacing the
 
                     row = row.replace(removetext, "");
 
                     textFieldArrayOutput[i].setText(text);
-                    // textFieldArrayOutput[i].setText();
                 }
             } catch (IOException | NumberFormatException e1) {
                 JOptionPane.showMessageDialog(frame, "The entered input isn't a number.", "Input error",

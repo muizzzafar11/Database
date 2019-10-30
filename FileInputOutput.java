@@ -20,6 +20,8 @@ public class FileInputOutput {
     private BufferedReader reader;
 
     private String line = "";
+    private String rowVal = "";
+    private String textString = "";
     private String IdData;
     private String reduceIdLine;
     private ArrayList<String> data = new ArrayList<String>();
@@ -55,13 +57,14 @@ public class FileInputOutput {
 
     public void WriteFile() {
         try {
-            writer.write(this.UserInput);
+            writer.append(this.UserInput);
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    // For moving onto the next line in the text file
     public void NewLine() {
         try {
             writer = new BufferedWriter(new FileWriter(this.FileName, true));
@@ -72,22 +75,28 @@ public class FileInputOutput {
         }
     }
 
-    private String rowVal = "";
-
+    // Gettign the id of the row, the first element of the row
     public String getId() throws IOException {
 
         while ((line = reader.readLine()) != null) {
             // finding the first occurrence of | in the string.
             int number = line.indexOf("|");
+            // increase the row val and return it, new id of the row
             rowVal = Integer.toString(Integer.parseInt(line.substring(0, number)) + 1);
         }
+        // If nothing is present then return zero.
         if (rowVal == "")
             return "0|";
         return rowVal + "|";
     }
 
-    // private String checkLargerId;
-
+    /**
+     * The algorithm for the deleteRow is that it is writing the rows to the
+     * arraylist and if the id of the row matches the given id then it moves onto
+     * the next line using readLine() and it adds the next line to the arraylist
+     * while decreasing the id of the line. Afterwards it makes a new file and
+     * writes the arraylist elements to it.
+     */
     public void deleteRow(String Id) {
 
         // replace line with readline to make it work
@@ -115,7 +124,7 @@ public class FileInputOutput {
             writer = new BufferedWriter(new FileWriter(this.FileName));
             for (int j = 0; j < data.size(); j++) {
                 String stringData = data.get(j);
-                writer.write(stringData);
+                writer.append(stringData);
                 writer.newLine();
             }
             writer.close();
@@ -125,8 +134,8 @@ public class FileInputOutput {
         }
     }
 
+    // If the ID matches the id of the line then it returns that line
     public String getRow(JTextField[] textFields) throws IOException {
-        // reader = new BufferedReader(new FileReader(this.FileName));
 
         while ((line = reader.readLine()) != null) {
             endIndex = line.indexOf("|");
@@ -140,40 +149,38 @@ public class FileInputOutput {
             }
         }
         reader.close();
-        // put that line here, this is the error
+        // If there is no such line then return null string
         return "null";
     }
 
-    // check the number for this string I think this is wrong.
-    private String textString = "";
-
-    // creating an empty file without the data in it.
-    // Probably the fault of the arraylist
+    /**
+     * The JtextField index 12 contains the Id, inoput from the user. Adding the
+     * rows from the database to the data arraylist, if the id matches then start
+     * replacing that string with the text of all of the jtextfield boxes. And then
+     * it goes on and fills the arraylist with the other rows from the database.
+     * This arraylist is then written to a new file with the same name.
+     */
     public void getRowEdit(JTextField[] textFields) {
         try {
             while ((line = reader.readLine()) != null) {
                 endIndex = line.indexOf("|") + 1;
                 textId = line.substring(0, endIndex);
-                // if ((textId.equals(textFields[12].getText())) == false) {
-                //     data.add(i, line);
-                //     i++;
-                // }
-                  if (textId.equals(textFields[12].getText())) {
+                if (textId.equals(textFields[12].getText())) {
                     textString = textFields[12].getText();
                     for (int j = 0; j < textFields.length - 1; j++) {
                         textString += textFields[j].getText();
                     }
                     line = textString;
-                    
+
                 }
                 data.add(i, line);
-                    i++;
+                i++;
             }
 
             writer = new BufferedWriter(new FileWriter(this.FileName));
             for (int j = 0; j < data.size(); j++) {
                 String stringData = data.get(j);
-                writer.write(stringData);
+                writer.append(stringData);
                 writer.newLine();
             }
             writer.close();
@@ -182,9 +189,3 @@ public class FileInputOutput {
         }
     }
 }
-
-// Have jradioboxes, make an array for each jradiobox. each index corresponds
-// with the one of the string array contining the string seperated by |.
-// The string will replace,
-// give each radiobox a number and it will move onto that number of the gettext
-// string array, ask for the index first,
