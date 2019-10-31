@@ -19,17 +19,27 @@ public class FileInputOutput {
     private BufferedWriter writer;
     private BufferedReader reader;
 
+    // For reading line from the text file
     private String line = "";
+    // For storing the line and changing the id of the line, getId()
     private String rowVal = "";
+    // For stroing the string from the jTextField, getRowEdit()
     private String textString = "";
-    private String IdData;
+    // For storing the reduced value of the id, deleteRow()
     private String reduceIdLine;
+    // For storing the lines of the text file, editRow and deleteRow
     private ArrayList<String> data = new ArrayList<String>();
+    // For the data arrayList
     private int i = 0;
+    // For storing the location of the bar seperating the data in the Db
     private int endIndex;
+    // For deleting the
     private StringBuilder stringBuilder;
+    // For stroing the id of the line form the text field
     private String textId;
+
     private String removeId;
+    // For storing text form textField, getRow()
     private String textFieldText;
 
     public FileInputOutput(String FileName, String UserInput) {
@@ -55,6 +65,7 @@ public class FileInputOutput {
         }
     }
 
+    // Writing to file, if the constructor with userInput is used
     public void WriteFile() {
         try {
             writer.append(this.UserInput);
@@ -99,15 +110,16 @@ public class FileInputOutput {
      */
     public void deleteRow(String Id) {
 
+        // Changed the idData with textID
         // replace line with readline to make it work
         try {
             while ((line = reader.readLine()) != null) {
                 endIndex = line.indexOf("|");
-                IdData = line.substring(0, endIndex);
-                if ((IdData.equals(Id)) == false) {
+                textId = line.substring(0, endIndex);
+                if ((textId.equals(Id)) == false) {
                     data.add(i, line);
                     i++;
-                } else if (IdData.equals(Id)) {
+                } else if (textId.equals(Id)) {
                     // when it goes back, it is set to null, change that as well
                     while ((line = reader.readLine()) != null) {
                         endIndex = line.indexOf("|");
