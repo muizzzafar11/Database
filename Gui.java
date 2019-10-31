@@ -10,18 +10,15 @@ import java.io.IOException;
  */
 public class Gui {
 
-    /*
-     *
-     */
-
     private int x, y;
+    private String addBar = "";
+    private String getDialogboxId;
+
     private JFrame frame;
     private Container contentPane;
-    private String getDialogboxId;
 
     private JTextField[] textFieldArrayInput = new JTextField[12];
     private JTextField[] textFieldArrayOutput = new JTextField[13];
-    // private JRadioButton[] radioButton = new JRadioButton[12];
 
     private String[] textArray = new String[textFieldArrayInput.length + 1];
 
@@ -35,7 +32,6 @@ public class Gui {
     private void initializeThing() {
         for (int i = 0; i < textFieldArrayInput.length; i++) {
             textFieldArrayInput[i] = new JTextField();
-            // radioButton[i] = new JRadioButton();
         }
         for (int i = 0; i < textFieldArrayOutput.length; i++) {
             textFieldArrayOutput[i] = new JTextField();
@@ -52,7 +48,6 @@ public class Gui {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(3);
         Specifications();
-
     }
 
     // setting the internal properties of the frame
@@ -196,15 +191,15 @@ public class Gui {
     private void deleteTextFrame() {
 
         getDialogboxId = JOptionPane.showInputDialog(frame, "Enter Id you want to delete:");
-
-        FileInputOutput fio = new FileInputOutput("test.txt");
         try {
             Integer.parseInt(getDialogboxId);
-            // Integer.parseInt(textFieldArrayOutput[12].getText());
         } catch (NumberFormatException isId) {
             JOptionPane.showMessageDialog(frame, "The entered input isn't a number.", "Input error",
                     JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        FileInputOutput fio = new FileInputOutput("test.txt");
         fio.deleteRow(getDialogboxId);
     }
 
@@ -222,6 +217,16 @@ public class Gui {
         @Override
         public void actionPerformed(ActionEvent e) {
             getDialogboxId = JOptionPane.showInputDialog(frame, "Enter Id you want to edit:");
+            // Converting it to an int and then checking that if there is an error then tell
+            // the user that the entered input isn't a number
+            try {
+                Integer.parseInt(getDialogboxId);
+                // Integer.parseInt(textFieldArrayOutput[12].getText());
+            } catch (NumberFormatException isId) {
+                JOptionPane.showMessageDialog(frame, "The entered input isn't a number.", "Input error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             textFieldArrayOutput[12].setText(getDialogboxId);
             recallTextFrame(true);
         }
@@ -247,15 +252,14 @@ public class Gui {
 
     }
 
-    private String dString = "";
-
     private class updateFile implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            // Adding bar and then returning the textfield text
             for (int i = 0; i < textFieldArrayOutput.length; i++) {
-                dString = textFieldArrayOutput[i].getText() + "|";
-                textFieldArrayOutput[i].setText(dString);
+                addBar = textFieldArrayOutput[i].getText() + "|";
+                textFieldArrayOutput[i].setText(addBar);
             }
             FileInputOutput fio = new FileInputOutput("test.txt");
             fio.getRowEdit(textFieldArrayOutput);
