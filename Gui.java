@@ -55,7 +55,6 @@ public class Gui {
         contentPane = (JPanel) frame.getContentPane();
         contentPane.setLayout(new BorderLayout(6, 6));
         mainDisplay(contentPane);
-
     }
 
     // Setting the properties internal properties of the main frame
@@ -64,8 +63,11 @@ public class Gui {
         // Setting the layout to x-axis so that all of the buttons are in a straight
         // line
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        // Setting the color of the panel
+        panel.setBackground(Color.DARK_GRAY);
         // Making the border
-        panel.setBorder(BorderFactory.createTitledBorder("Action Buttons:"));
+        panel.setBorder(
+                BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Action Buttons:"));
         JButton addButton = new JButton("Add to Database");
         JButton recallButton = new JButton("Recall from the Database");
         JButton deleteButton = new JButton("Delete from the Database");
@@ -73,7 +75,7 @@ public class Gui {
         panel.add(addButton);
         panel.add(recallButton);
         panel.add(deleteButton);
-        panel.add(editRowButton);
+        panel.add(editRowButton);   
         pane.add(panel, BorderLayout.NORTH);
         // Adding actionlistener for each of the buttons
         recallButton.addActionListener(new recallButtonClass());
@@ -127,7 +129,7 @@ public class Gui {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder("Populate:"));
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "populate:"));
 
         // Making a textbox and setting each textox to a specified index of the
         // textField array
@@ -163,7 +165,8 @@ public class Gui {
         // not working for period 5 teacher or period
         JPanel panelsouth = new JPanel();
         panelsouth.setLayout(new BoxLayout(panelsouth, BoxLayout.Y_AXIS));
-        panelsouth.setBorder(BorderFactory.createTitledBorder("Display:"));
+
+        panelsouth.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE), "Display:"));
 
         panelsouth.add(smallPanel("  Name      ", textFieldArrayInput[0], true));
         panelsouth.add(smallPanel("  Age          ", textFieldArrayInput[1], true));
